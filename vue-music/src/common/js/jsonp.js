@@ -1,6 +1,6 @@
 import originJSONP from 'jsonp'
 
-export default function jsonp(url, data, opt) {
+export default function jsonp(url, data, opt) { // bug
   url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
   return new Promise((resolve, reject) => {
     originJSONP(url, opt, (err, data) => {
