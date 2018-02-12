@@ -1,17 +1,23 @@
 <template>
   <div class="slider" ref="slider">
     <div class="slider-group" ref="sliderGroup">
-      <slot>
-      </slot>
+      <slot></slot>
     </div>
     <div class="dots">
+      <span class="dot" v-for="item in dots" :key="item.id"></span>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
+import {addClass} from 'common/js/dom'
 export default {
+  data() {
+    return {
+      dots: []
+    }
+  },
   props: {
     loop: {
       type: Boolean,
@@ -26,17 +32,46 @@ export default {
       default: 4000
     }
   },
-  mounted() {
+  mounted() { // 浏览器刷新17ms一次，保障dom
     setTimeout(() => {
       this._setSliderWidth()
+      this._initDots()
       this._initSlider()
     }, 20)
   },
   methods: {
     _setSliderWidth() {
-      this.child = this.$refs.sliderGroup.children
+      this.children = this.$refs.sliderGroup.children
+      // console.log(this.child)
+      let width = 0
+      let sliderWidth = this.$refs.slider.clientWidth
+      for (let i = 0; i < this.children.length; i++) {
+        let child = this.children[i]
+        addClass(child, 'slider-item')
+        child.style.width = sliderWidth + 'px'
+        width += sliderWidth
+      }
+      if (this.loop) {
+        width += 2 * sliderWidth
+      }
+      this.$refs.sliderGroup.style.width = width + 'px'
+    },
+    _initDots() {
+      this.dots = new Array(this.children.length)
+      for (let i = 0; i < this.dots.length; i++) {
+        this.dots[i] = ''
+      }
     },
     _initSlider() {
+      this.slider = new BScroll(this.$refs.slider, {
+        scrollX: true,
+        scrollY: false,
+        momentum: false,
+        snap: true,
+        snapLoop: this.loop,
+        snapThreshold: 0.3,
+        snapSpeed: 400
+      })
     }
   }
 }

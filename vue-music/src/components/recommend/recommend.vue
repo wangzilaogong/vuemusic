@@ -1,7 +1,7 @@
 <template>
   <div class="recommend">
     <div class="recommend-content">
-      <div class="slider-wrapper">
+      <div v-if="recommends.length" class="slider-wrapper">
         <slider>
           <div v-for="item in recommends" :key="item.id"><!--加入：key diff算法渲染dom-->
             <a :href ="item.linkUrl">
