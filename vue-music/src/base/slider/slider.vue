@@ -72,6 +72,9 @@ export default {
         snapThreshold: 0.3,
         snapSpeed: 400
       })
+      this.slider.on('scroll', function () {
+        console.log('sss')
+      })
     }
   }
 }
